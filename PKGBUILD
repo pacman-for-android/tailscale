@@ -4,7 +4,7 @@
 
 pkgname=tailscale
 pkgver=1.48.1
-pkgrel=1
+pkgrel=2
 pkgdesc="A mesh VPN that makes it easy to connect your devices, wherever they are."
 arch=("x86_64")
 url="https://tailscale.com"
@@ -40,9 +40,9 @@ build() {
     GO_LDFLAGS="\
         -compressdwarf=false \
         -linkmode=external \
-        -X tailscale.com/version.Long=${pkgver} \
-        -X tailscale.com/version.Short=$(cut -d+ -f1 <<< "${pkgver}") \
-        -X tailscale.com/version.GitCommit=${_commit}"
+        -X tailscale.com/version.longStamp=${pkgver} \
+        -X tailscale.com/version.shortStamp=$(cut -d+ -f1 <<< "${pkgver}") \
+        -X tailscale.com/version.gitCommitStamp=${_commit}"
     for cmd in ./cmd/tailscale ./cmd/tailscaled; do
         go build -v -tags xversion -ldflags "$GO_LDFLAGS" "$cmd"
     done
