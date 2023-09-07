@@ -1,0 +1,54 @@
+diff --git a/tailscale/net/dns/manager_linux.go b/tailscale.modified/net/dns/manager_linux.go
+index 642fe99..331a378 100644
+--- a/tailscale/net/dns/manager_linux.go
++++ b/tailscale.modified/net/dns/manager_linux.go
+@@ -358,7 +358,7 @@ func resolvedIsActuallyResolver(logf logger.Logf, env newOSConfigEnv, dbg func(k
+ // isLibnssResolveUsed reports whether libnss_resolve is used
+ // for resolving names. Returns nil if it is, and an error otherwise.
+ func isLibnssResolveUsed(env newOSConfigEnv) error {
+-	bs, err := env.fs.ReadFile("/etc/nsswitch.conf")
++	bs, err := env.fs.ReadFile("/data/etc/nsswitch.conf")
+ 	if err != nil {
+ 		return fmt.Errorf("reading /etc/resolv.conf: %w", err)
+ 	}
+diff --git a/tailscale/net/dns/resolvconfpath_default.go b/tailscale.modified/net/dns/resolvconfpath_default.go
+index 57e82c4..f598fb3 100644
+--- a/tailscale/net/dns/resolvconfpath_default.go
++++ b/tailscale.modified/net/dns/resolvconfpath_default.go
+@@ -6,6 +6,6 @@
+ package dns
+ 
+ const (
+-	resolvConf = "/etc/resolv.conf"
+-	backupConf = "/etc/resolv.pre-tailscale-backup.conf"
++	resolvConf = "/data/etc/resolv.conf"
++	backupConf = "/data/etc/resolv.pre-tailscale-backup.conf"
+ )
+diff --git a/tailscale/paths/paths.go b/tailscale.modified/paths/paths.go
+index 343692f..6199aa3 100644
+--- a/tailscale/paths/paths.go
++++ b/tailscale.modified/paths/paths.go
+@@ -39,8 +39,8 @@ func DefaultTailscaledSocket() string {
+ 	case distro.QNAP:
+ 		return "/tmp/tailscale/tailscaled.sock"
+ 	}
+-	if fi, err := os.Stat("/var/run"); err == nil && fi.IsDir() {
+-		return "/var/run/tailscale/tailscaled.sock"
++	if fi, err := os.Stat("/data/var/run"); err == nil && fi.IsDir() {
++		return "/data/var/run/tailscale/tailscaled.sock"
+ 	}
+ 	return "tailscaled.sock"
+ }
+diff --git a/tailscale/paths/paths_unix.go b/tailscale.modified/paths/paths_unix.go
+index a8e22e7..ee17562 100644
+--- a/tailscale/paths/paths_unix.go
++++ b/tailscale.modified/paths/paths_unix.go
+@@ -22,7 +22,7 @@ func init() {
+ func statePath() string {
+ 	switch runtime.GOOS {
+ 	case "linux":
+-		return "/var/lib/tailscale/tailscaled.state"
++		return "/data/var/lib/tailscale/tailscaled.state"
+ 	case "freebsd", "openbsd":
+ 		return "/var/db/tailscale/tailscaled.state"
+ 	case "darwin":
